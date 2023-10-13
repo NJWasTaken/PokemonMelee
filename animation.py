@@ -6,7 +6,7 @@ df = pd.read_csv("PokemonData.csv")
 df["Path"]=df["Name"]+".png"
 
 df1 = df.loc[:9,["Path"]]
-r = random.randint(0,9)
+r = random.randint(0,8)
 
 pygame.init()
 width=1050;
