@@ -2,57 +2,92 @@ import pygame
 import random
 import pandas as pd
 from pygame.locals import *
+
 df = pd.read_csv("PokemonData.csv")
 df["Path"]=df["Name"]+".png"
-
 df1 = df.loc[:9,["Path"]]
-r = random.randint(0,8)
 
+r = random.randint(0,9)
+r2 = random.randint(1,151)
+oppath=str(r2)+'.png'
 pygame.init()
+
 width=1050;
-height=600
+height=700
+
 pk = df1.Path[r]
-screen = pygame.display.set_mode( ( width, height) )
+
+screen = pygame.display.set_mode( (width, height) )
+
 pkmg = pygame.image.load(f"img_back\\{pk}").convert()
-pkmg2 = pygame.image.load(f"img_back\\charmeleon.png").convert()
 pkmg = pygame.transform.scale(pkmg,(200,200))
+pkmg2 = pygame.image.load(f"img_front\\{oppath}").convert_alpha()
+pkmg2 = pygame.transform.scale(pkmg2,(200,200))
+
 fpsClock = pygame.time.Clock()
-imageX= 190; # x coordnate of image
-imageY= 220; # y coordinate of image
-#imageX=560;
-#imageY=100;
+
+pimageX= 190;
+pimageY= 380; 
+cimageX=580;
+cimageY=200;
+
 running = True
-black = ( 0 , 0 , 0)
+
 bg_img = pygame.image.load(r'bgimg.jpg').convert()
 bg_img = pygame.transform.scale(bg_img,(width,height))
 
 a=1
-def attan(x,y,c):
-    if x >= 420:
+b=1
+st=False
+
+def attan(x,y,c,s):
+    if x >= 240:
         c=0
 
-    if y<420 and c!=0:
+    if x<240 and c!=0:
         x += 1 ;
-    y = (((x-415)**2)/300)+140 ;
-    
+        y -= 0.5
+
     if c==0 and x>190:
         x-=1;
+        y+=0.5
     
     if c==0 and x<=190:
+        s = True
+    return (x,y,c,s)
+
+
+def stagger(x,y,c):
+    if x >= 610:
+        c=0
+
+    if x<610 and c!=0:
+        x += 1 ;
+        y -= 0.5
+
+    if c==0 and x>580:
+        x-=1;
+        y+=0.5
+    
+    if c==0 and x<=580:
         pass
     return (x,y,c)
-while (running): # main game loop
+
+
+while (running): 
     screen.fill((0,0,0))
     screen.blit(bg_img,[0,0])
-    imageX,imageY,a=attan(imageX,imageY,a)
-    screen.blit(pkmg , [imageX, imageY]) # paint to screen
+    if st == False:
+        pimageX,pimageY,a,st=attan(pimageX,pimageY,a,st)
+    else:
+        cimageX,cimageY,b=stagger(cimageX,cimageY,b)
+    screen.blit(pkmg2 , [cimageX,cimageY])
+    screen.blit(pkmg , [pimageX, pimageY])
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            # Set the x, y postions of the mouse click
             x, y = event.pos
     pygame.display.update()
-    fpsClock.tick(270)
-#loop over, quite pygame
+    fpsClock.tick(300)
 pygame.quit()
