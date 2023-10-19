@@ -29,13 +29,14 @@ fpsClock = pygame.time.Clock()
 pimageX= 190;
 pimageY= 380; 
 cimageX=580;
-cimageY=200;
+cimageY=220;
 
 running = True
 
-bg_img = pygame.image.load(r'bgimg.jpg').convert()
+bg_img = pygame.image.load(r'\\assets\\art\\bgimg.jpg').convert()
 bg_img = pygame.transform.scale(bg_img,(width,height))
-
+gui = pygame.image.load(r'\\assets\\gui\\mainmenu.jpg').convert()
+gui = pygame.transform.scale(gui,(1050, 187))
 a=1
 b=1
 st=False
