@@ -10,6 +10,6 @@ Created by Noel Jose, Pranav Rajesh, Pranav Hemanth and Pragathi Panchangam
 4. .exe file to be added soon.
 
 ### Bibliography
-Pokemon sprites taken from (PokeAPI)[https://github.com/PokeAPI] and (pokemondb)[pokemondb.net/sprites]
-Home music by (Frank Tedesco)[https://www.youtube.com/@tedescoarchive]
-Battle music by (Pokeli)[https://www.youtube.com/@Pokeli]
+- Pokemon sprites taken from [PokeAPI](https://github.com/PokeAPI) and [pokemondb](https://www.pokemondb.net/sprites)
+- Home music by [Frank Tedesco](https://www.youtube.com/@tedescoarchive)
+- Battle music by [Pokeli](https://www.youtube.com/@Pokeli)
