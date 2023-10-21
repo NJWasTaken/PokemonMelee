@@ -18,10 +18,13 @@ df["Path"]=df["Name"]+".png"
 #Selecting a random Player Pokemon
 r = random.randint(0,150)
 pk = df.Path[r]
+ptype = df.Types[r]
 
 #Selecting a random Opponent Pokemon
 r2 = random.randint(1,151)
 oppath=str(r2)+'.png'
+optype = df.Types[r2-1]
+
 
 #Defining chance for the opponent Pokemon to be shiny (rare)
 schance = random.randint(1,100)
@@ -126,6 +129,9 @@ while (running):
             x, y = event.pos
             #Fight
             if path == 'mainmenu' and (x in range(516,778) and y in range(525,610)):
+                path = 'fight'
+            
+            if path == 'fight' and ((x in range(55,400) and y in range(555,606)) or (x in range(415,690) and y in range(555,606)) or (x in range(55,400) and y in range(615,665)) or (x in range(415,690) and y in range(615,665))):
                 pattack = True
                 st = False
                 hasatt = 1
@@ -139,6 +145,11 @@ while (running):
                 if (x in range(518,778) and y in range(565,650)):
                     running = False
                 if (x in range(780,1040) and y in range(565,650)):
+                    path = 'mainmenu'
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                if path == 'fight':
                     path = 'mainmenu'
                 
     screen.blit(gui,[0,513])
