@@ -66,6 +66,23 @@ path = 'mainmenu'
 audio = 'home'
 mainscreen = 'startup'
 l=[]
+lvol=[]
+
+#Volume 
+sppath = 'speaker'
+vol = 0.2
+
+#Sounds
+sel_sound = pygame.mixer.Sound("assets\\audio\\select.mp3")
+
+#Buttons
+start_b = pygame.image.load(f"assets\\gui\\begin.png").convert_alpha()
+start_b = pygame.transform.scale(start_b,(275,100))
+options_b = pygame.image.load(f"assets\\gui\\options.png").convert_alpha()
+options_b = pygame.transform.scale(options_b,(275,100))
+exit_b = pygame.image.load(f"assets\\gui\\exit.png").convert_alpha()
+exit_b = pygame.transform.scale(exit_b,(275,100))
+
 
 #Player Pokemon attack animation
 def attan(x,y,c,s):
@@ -107,24 +124,35 @@ while (running):
     bg_img = pygame.transform.scale(bg_img,(width,height))
     gui = pygame.image.load(f"assets\gui\{path}.png").convert()
     gui = pygame.transform.scale(gui,(1050, 187))
+    speaker = pygame.image.load(f"assets\\audio\\{sppath}.png").convert_alpha()
+    speaker = pygame.transform.scale(speaker,(100,100))
     
     #Setting up game music
     if audio not in l:
         l.clear()
         pygame.mixer.music.load(f'assets\\audio\\{audio}.mp3')
-        pygame.mixer.music.set_volume(0.2)
         pygame.mixer.music.play(-1)
         l.append(audio) 
+    pygame.mixer.music.set_volume(vol)
 
     screen.fill((0,0,0)) #Base Layer    
     screen.blit(bg_img,[0,0]) #Background Image
+    screen.blit(speaker,[900,50]) #Volume
     
+    #Homescreen
+    if mainscreen == 'startup':
+        screen.blit(exit_b,[400,600])
+        screen.blit(start_b,[400,300])
+        screen.blit(options_b,[400,400])
+
     #Player attack event
     if pattack == True:
         if st == False:
             pimageX,pimageY,hasatt,st=attan(pimageX,pimageY,hasatt,st)
         else:
             cimageX,cimageY,hasstag,pattack=stagger(cimageX,cimageY,hasstag,pattack)
+    
+    #Pokemon sprites
     if mainscreen == 'bgimg':
         screen.blit(pkmg2 , [cimageX,cimageY])
         screen.blit(pkmg , [pimageX, pimageY])
@@ -136,35 +164,59 @@ while (running):
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
+            #print('x:',x,',y:',y)
+            #Homepage
+            if mainscreen == 'startup':
+                if x in range(405, 645) and y in range(610, 695):
+                    pygame.mixer.Sound.play(sel_sound)
+                    running = False
+                if x in range(405, 645) and y in range(310,390):
+                    pygame.mixer.Sound.play(sel_sound)
+                    mainscreen = 'bgimg'
+                    audio = 'theme'
+                    path = 'mainmenu'
+            #Volume
+            if x in range(900,960) and y in range(70,130):
+                if vol == 0:
+                    sppath = 'speaker'
+                    vol = 0.2
+                elif vol == 0.2:
+                    pygame.mixer.Sound.play(sel_sound)
+                    sppath = 'speakernt'
+                    vol = 0
+
             #Fight
             if path == 'mainmenu' and (x in range(516,778) and y in range(525,610)):
                 path = 'fight'
             
             if path == 'fight' and ((x in range(55,400) and y in range(555,606)) or (x in range(415,690) and y in range(555,606)) or (x in range(55,400) and y in range(615,665)) or (x in range(415,690) and y in range(615,665))):
+                pygame.mixer.Sound.play(sel_sound)
                 pattack = True
                 st = False
                 hasatt = 1
                 hasstag = 1
 
             #Run
-            if path == 'mainmenu' and (x in range(780,1040) and y in range(608,693)):
+            if path == 'mainmenu' and (x in range(780,1040) and y in range(590,693)):
                 path = 'run'
 
             if path == 'run':
                 if (x in range(518,778) and y in range(565,650)):
-                    running = False
+                    pygame.mixer.Sound.play(sel_sound)
+                    mainscreen = 'startup'
+                    audio = 'home'
                 if (x in range(780,1040) and y in range(565,650)):
+                    pygame.mixer.Sound.play(sel_sound)
                     path = 'mainmenu'
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                mainscreen = 'bgimg'
-                audio = 'theme'
                 if path == 'fight':
                     path = 'mainmenu'
     
     if mainscreen == 'bgimg':
         screen.blit(gui,[0,513])
+
     pygame.display.update()
     fpsClock.tick(200)
 pygame.quit()
