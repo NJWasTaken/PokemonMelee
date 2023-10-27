@@ -70,7 +70,7 @@ lvol=[]
 
 #Volume 
 sppath = 'speaker'
-vol = 0.2
+vol = 0.5
 
 #Sounds
 sel_sound = pygame.mixer.Sound("assets\\audio\\select.mp3")
@@ -175,12 +175,13 @@ while (running):
                     mainscreen = 'bgimg'
                     audio = 'theme'
                     path = 'mainmenu'
+
             #Volume
             if x in range(900,960) and y in range(70,130):
                 if vol == 0:
                     sppath = 'speaker'
-                    vol = 0.2
-                elif vol == 0.2:
+                    vol = 0.5
+                elif vol == 0.5:
                     pygame.mixer.Sound.play(sel_sound)
                     sppath = 'speakernt'
                     vol = 0
