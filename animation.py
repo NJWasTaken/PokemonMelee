@@ -37,14 +37,14 @@ height=700
 screen = pygame.display.set_mode( (width, height) )
 
 #Loading Player Pokemon images
-pkmg = pygame.image.load(f"assets\\player\\img_back\\{pk}").convert()
+pkmg = pygame.image.load(os.path.join('assets','player','img_back',pk)).convert()
 pkmg = pygame.transform.scale(pkmg,(200,200))
 
 #Loading Opponent Pokemon images
 if schance == 42:
-    pkmg2 = pygame.image.load(f"assets\\opp\\shiny\\{oppath}").convert_alpha()
+    pkmg2 = pygame.image.load(os.path.join('assets','opp','shiny',oppath)).convert_alpha()
 else:
-    pkmg2 = pygame.image.load(f"assets\\opp\\img_front\\{oppath}").convert_alpha()
+    pkmg2 = pygame.image.load(os.path.join('assets','opp','img_front',oppath)).convert_alpha()
 pkmg2 = pygame.transform.scale(pkmg2,(200,200))
 
 #Set game speed
@@ -73,14 +73,14 @@ sppath = 'speaker'
 vol = 0.5
 
 #Sounds
-sel_sound = pygame.mixer.Sound("assets\\audio\\select.mp3")
+sel_sound = pygame.mixer.Sound(os.path.join('assets','audio','select.mp3'))
 
 #Buttons
-start_b = pygame.image.load(f"assets\\gui\\begin.png").convert_alpha()
+start_b = pygame.image.load(os.path.join('assets','gui','begin.png')).convert_alpha()
 start_b = pygame.transform.scale(start_b,(275,100))
-options_b = pygame.image.load(f"assets\\gui\\options.png").convert_alpha()
+options_b = pygame.image.load(os.path.join('assets','gui','options.png')).convert_alpha()
 options_b = pygame.transform.scale(options_b,(275,100))
-exit_b = pygame.image.load(f"assets\\gui\\exit.png").convert_alpha()
+exit_b = pygame.image.load(os.path.join('assets','gui','exit.png')).convert_alpha()
 exit_b = pygame.transform.scale(exit_b,(275,100))
 
 
@@ -120,17 +120,17 @@ def stagger(x,y,c,p):
 
 #Main Loop
 while (running):
-    bg_img = pygame.image.load(f"assets\\art\\{mainscreen}.jpg").convert()
+    bg_img = pygame.image.load(os.path.join('assets','art',mainscreen+'.jpg')).convert()
     bg_img = pygame.transform.scale(bg_img,(width,height))
-    gui = pygame.image.load(f"assets\gui\{path}.png").convert()
+    gui = pygame.image.load(os.path.join('assets','gui',path+'.png')).convert()
     gui = pygame.transform.scale(gui,(1050, 187))
-    speaker = pygame.image.load(f"assets\\audio\\{sppath}.png").convert_alpha()
+    speaker = pygame.image.load(os.path.join('assets','audio',sppath+'.png')).convert_alpha()
     speaker = pygame.transform.scale(speaker,(100,100))
     
     #Setting up game music
     if audio not in l:
         l.clear()
-        pygame.mixer.music.load(f'assets\\audio\\{audio}.mp3')
+        pygame.mixer.music.load(os.path.join('assets','audio',audio+'.mp3'))
         pygame.mixer.music.play(-1)
         l.append(audio) 
     pygame.mixer.music.set_volume(vol)
