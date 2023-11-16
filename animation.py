@@ -57,6 +57,8 @@ cimageX=580;
 cimageY=220;
 
 #Setting variables for game states
+# pname = ''
+# opname = ''
 running = True
 hasatt=1
 hasstag=1
