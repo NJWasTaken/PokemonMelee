@@ -2,6 +2,7 @@ import time
 import numpy as np
 import sys
 import pokedex
+import random
 
 def delay(s):
     for c in s:
@@ -10,7 +11,7 @@ def delay(s):
         time.sleep(0.05)
 
 class Pokemon:
-    def __init__(self,name,types,moves,EVs,health='===================='):
+    def __init__(self,name,types,moves,EVs,health=100):
         self.name = name
         self.types = types
         self.moves = moves
@@ -20,6 +21,7 @@ class Pokemon:
         self.health = health
 
     def fight(self,Pokemon2):
+        global str1,str2
         print('-------BATTLE-------')
         print(f"\n{self.name}")
         print("TYPE/",self.types)
@@ -42,9 +44,10 @@ class Pokemon:
                 self.att /= 2
                 str1 = "\nIt's not very effective..."
                 str2 = '\n...'
+                
             
             elif Pokemon2.types == 'Ghost':
-                self.att *= 0 
+                self.att *= 0
                 Pokemon2.att *= 0
                 str1 = "\nIt's immune..."
                 str2 = "\nIt's immune..."
@@ -686,79 +689,191 @@ class Pokemon:
                 str2 = '\n...'
         
         
+def oneplayer(self,Pokemon2):
+    global str1,str2
+    while (self.hp > 0) and (Pokemon2.hp > 0):
+        print(f"\n{self.name}\t\tHP\t{self.health}\n")
+        print(f"{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
+
+        #User's Turn
+        print(f"Go {self.name}!")
+
+        for i,k in enumerate(self.moves):
+            print(f"{i+1}.",k)
         
-        while (self.hp > 0) and (Pokemon2.hp > 0):
+        mov = int(input("Pick a move: "))
+        while mov not in [1,2,3,4]:
+            mov = int(input("Pick a valid move number: "))
+        delay(f"{self.name} used {self.moves[mov-1]}!")
+
+        time.sleep(1)
+
+        delay(str1)
+
+        Pokemon2.hp -= self.att//2
+        Pokemon2.health = -100
+
+        for j in range(int(Pokemon2.hp+0.1*Pokemon2.defn)):
+            Pokemon2.health += 10
+
+        time.sleep(1)
+        
+        if self.health>=0:
             print(f"\n{self.name}\t\tHP\t{self.health}\n")
-            print(f"{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
-
-            #User's Turn
-            print(f"Go {self.name}!")
-
-            for i,k in enumerate(self.moves):
-                print(f"{i+1}.",k)
-            
-            mov = int(input("Pick a move: "))
-            while mov not in [1,2,3,4]:
-                mov = int(input("Pick a valid move number: "))
-            delay(f"{self.name} used {self.moves[mov-1]}!")
-
-            time.sleep(1)
-
-            delay(str1)
-
-            Pokemon2.hp -= self.att
-            Pokemon2.health = ""
-
-            for j in range(int(Pokemon2.hp+(0.1*Pokemon2.defn))):
-                Pokemon2.health += "="
-
-            time.sleep(1)
-            
+        else:
+            print(f"\n{self.name}\t\tHP\t0\n")
+            print(f"\n{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
+            delay(self.name+' has fainted ...')
+            break
+        if Pokemon2.health>=0:
+            print(f"\n{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
+        else:
             print(f"\n{self.name}\t\tHP\t{self.health}\n")
-            print(f"{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
+            print(f"\n{Pokemon2.name}\t\tHP\t0\n")
+            delay(Pokemon2.name+' has fainted ...')
+            break
 
-            time.sleep(0.5)
-
-            if Pokemon2.hp <= 0:
-                delay(Pokemon2.name+' has fainted ...')
-                break
+        time.sleep(0.5)
 
 
 
-            #Pokemon 2's Turn
-            print(f"Go {Pokemon2.name}!")
 
-            for i,k in enumerate(Pokemon2.moves):
-                print(f"{i+1}.",k)
-            
-            mov = int(input("Pick a move: "))
-            while mov not in [1,2,3,4]:
-                mov = int(input("Pick a valid move number: "))
-            delay(f"{Pokemon2.name} used {Pokemon2.moves[mov-1]}!")
+        #Pokemon 2's Turn
+        print(f"Go {Pokemon2.name}!")
 
-            time.sleep(1)
+        for i,k in enumerate(Pokemon2.moves):
+            print(f"{i+1}.",k)
+        
+        mov = random.randint(1,4)
+        while mov not in [1,2,3,4]:
+            mov = int(input("Pick a valid move number: "))
+        delay(f"{Pokemon2.name} used {Pokemon2.moves[mov-1]}!")
 
-            delay(str2)
+        time.sleep(1)
 
-            self.hp -= Pokemon2.att
-            self.health = ""
+        delay(str2)
 
-            for j in range(int(self.hp+0.1*self.defn)):
-                self.health += "="
+        self.hp -= Pokemon2.att//2
+        self.health = -100
 
-            time.sleep(1)
-            
+        for j in range(int(self.hp+0.1*self.defn)):
+            self.health += 10
+
+        time.sleep(1)
+        
+        if self.health>=0:
             print(f"\n{self.name}\t\tHP\t{self.health}\n")
-            print(f"{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
+        else:
+            print(f"\n{self.name}\t\tHP\t0\n")
+            print(f"\n{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
+            delay(self.name+' has fainted ...')
+            break
+        if Pokemon2.health>=0:
+            print(f"\n{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
+        else:
+            print(f"\n{self.name}\t\tHP\t{self.health}\n")
+            print(f"\n{Pokemon2.name}\t\tHP\t0\n")
+            delay(Pokemon2.name+' has fainted ...')
+            break
 
-            time.sleep(0.5)
+        time.sleep(0.5)
 
-            if self.hp <= 0:
-                delay(self.name+' has fainted ...')
-                break
-            
-        money = np.random.choice(10000)
-        delay(f"\nOpponent paid you {money}!")
+        
+    money = np.random.choice(10000)
+    delay(f"\nOpponent paid you {money}!\n")
+    
+def twoplayer(self,Pokemon2):
+    global str1,str2
+    while (self.hp > 0) and (Pokemon2.hp > 0):
+        print(f"\n{self.name}\t\tHP\t{self.health}\n")
+        print(f"{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
+
+        #User's Turn
+        print(f"Go {self.name}!")
+
+        for i,k in enumerate(self.moves):
+            print(f"{i+1}.",k)
+        
+        mov = int(input("Pick a move: "))
+        while mov not in [1,2,3,4]:
+            mov = int(input("Pick a valid move number: "))
+        delay(f"{self.name} used {self.moves[mov-1]}!")
+
+        time.sleep(1)
+
+        delay(str1)
+
+        Pokemon2.hp -= self.att//2
+        Pokemon2.health = -100
+
+        for j in range(int(Pokemon2.hp+0.1*Pokemon2.defn)):
+            Pokemon2.health += 10
+
+        time.sleep(1)
+        
+        if self.health>=0:
+            print(f"\n{self.name}\t\tHP\t{self.health}\n")
+        else:
+            print(f"\n{self.name}\t\tHP\t0\n")
+            print(f"\n{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
+            delay(self.name+' has fainted ...')
+            break
+        if Pokemon2.health>=0:
+            print(f"\n{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
+        else:
+            print(f"\n{self.name}\t\tHP\t{self.health}\n")
+            print(f"\n{Pokemon2.name}\t\tHP\t0\n")
+            delay(Pokemon2.name+' has fainted ...')
+            break
+
+        time.sleep(0.5)
+
+
+
+
+        #Pokemon 2's Turn
+        print(f"Go {Pokemon2.name}!")
+
+        for i,k in enumerate(Pokemon2.moves):
+            print(f"{i+1}.",k)
+        
+        mov = int(input("Pick a move: "))
+        while mov not in [1,2,3,4]:
+            mov = int(input("Pick a valid move number: "))
+        delay(f"{Pokemon2.name} used {Pokemon2.moves[mov-1]}!")
+
+        time.sleep(1)
+
+        delay(str2)
+
+        self.hp -= Pokemon2.att//2
+        self.health = -100
+
+        for j in range(int(self.hp+0.1*self.defn)):
+            self.health += 10
+
+        time.sleep(1)
+        
+        if self.health>=0:
+            print(f"\n{self.name}\t\tHP\t{self.health}\n")
+        else:
+            print(f"\n{self.name}\t\tHP\t0\n")
+            print(f"\n{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
+            delay(self.name+' has fainted ...')
+            break
+        if Pokemon2.health>=0:
+            print(f"\n{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
+        else:
+            print(f"\n{self.name}\t\tHP\t{self.health}\n")
+            print(f"\n{Pokemon2.name}\t\tHP\t0\n")
+            delay(Pokemon2.name+' has fainted ...')
+            break
+
+        time.sleep(0.5)
+
+        
+    money = np.random.choice(10000)
+    delay(f"\nOpponent paid you {money}!\n")
 
 
 
@@ -773,3 +888,17 @@ if __name__ == '__main__':
     while p1 == p2:
         p1 = np.random.choice(l)
     p1.fight(p2)
+    
+while True:
+    x=input('One player or 2 player mode? 3 to exit')
+    if x=='1':
+        oneplayer(p1,p2)
+        break
+    elif x=='2':
+        twoplayer(p1,p2)
+        break
+    elif x=='3':
+        break
+    else:
+        print('invalid input')
+        
