@@ -5,7 +5,7 @@ import pandas as pd
 from pygame.locals import *
 import os
 import tkinter as tk
-from tkinter import simpledialog
+from tkinter import simpledialog, ttk, messagebox
 
 #Making sure the program reads the file paths correctly 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -17,11 +17,13 @@ df["Path"]=df["Name"]+".png"
 #Selecting a random Player Pokemon
 r = random.randint(0,150)
 pk = df.Path[r]
+player_pk = df.Name[r]
 ptype = df.Types[r]
 
 #Selecting a random Opponent Pokemon
 r2 = random.randint(1,151)
 oppath=str(r2)+'.png'
+opponent_pk = df.Name[r2-1]
 optype = df.Types[r2-1]
 
 #Defining chance for the opponent Pokemon to be shiny (rare)
@@ -75,7 +77,10 @@ audio = 'home'
 mainscreen = 'startup'
 l=[]
 lvol=[]
-
+e = False
+r_emoji = str(random.randint(0,9))
+r_x =random.randint(0,950) 
+r_y =random.randint(0,413)
 #Volume 
 sppath = 'speaker'
 vol = 0.5
@@ -138,7 +143,7 @@ while (running):
     gui = pygame.transform.scale(gui,(1050, 187))
     speaker = pygame.image.load(os.path.join('assets','audio',sppath+'.png')).convert_alpha()
     speaker = pygame.transform.scale(speaker,(100,100))
-    r_emoji = str(random.randint(0,9))
+    
     emoji = pygame.image.load(os.path.join('assets','art',r_emoji+'.png')).convert_alpha()
     emoji = pygame.transform.scale(emoji,(100,100))
     
@@ -163,6 +168,10 @@ while (running):
 
     if op == True:
         screen.blit(optionmenu,[200,200])
+
+    #Emotes
+    if e == True:
+        screen.blit(emoji , [r_x,r_y])
 
     #Player attack event
     if pattack == True:
@@ -209,17 +218,19 @@ while (running):
 
             #Volume
             if x in range(900,960) and y in range(70,130):
-                if vol == 0:
-                    sppath = 'speaker'
-                    vol = 0.5
-                elif vol == 0.5:
-                    pygame.mixer.Sound.play(sel_sound)
-                    sppath = 'speakernt'
-                    vol = 0
+                if e == False:
+                    if vol == 0:
+                        sppath = 'speaker'
+                        vol = 0.5
+                    elif vol == 0.5:
+                        pygame.mixer.Sound.play(sel_sound)
+                        sppath = 'speakernt'
+                        vol = 0
 
             #Fight
             if path == 'mainmenu' and (x in range(516,778) and y in range(525,610)):
-                path = 'fight'
+                if e == False:
+                    path = 'fight'
             
             if path == 'fight' and ((x in range(55,400) and y in range(555,606)) or (x in range(415,690) and y in range(555,606)) or (x in range(55,400) and y in range(615,665)) or (x in range(415,690) and y in range(615,665))):
                 pygame.mixer.Sound.play(sel_sound)
@@ -230,7 +241,8 @@ while (running):
 
             #Run
             if path == 'mainmenu' and (x in range(780,1040) and y in range(590,693)):
-                path = 'run'
+                if e == False:
+                    path = 'run'
 
             if path == 'run':
                 if (x in range(518,778) and y in range(565,650)):
@@ -243,12 +255,36 @@ while (running):
             
             #Emote
             if path == 'mainmenu' and (x in range(785,1035) and y in range(525,610)):
-                    screen.blit(emoji , [pimageX+100, pimageY])
+                e = True
+                r_emoji = str(random.randint(0,9))
+                path = 'emojis'
+                pygame.mixer.Sound.play(sel_sound)
 
+            if e == True:
+                if x in range(r_x,r_x+100) and y in range(r_y,r_y+100):
+                    e = False
+                    r_emoji = str(random.randint(0,9)) 
+                    path = 'mainmenu'
+                    r_x =random.randint(0,950) 
+                    r_y =random.randint(0,600)
+                    pygame.mixer.Sound.play(sel_sound)
+
+            #Scan
+            if path == 'mainmenu' and (x in range(516,778) and y in range(590,693)):
+                pygame.mixer.Sound.play(sel_sound)
+                messagebox.showinfo("Battle Stats",f"Player: {pname} \nPlayer Pokemon: {player_pk.capitalize()} \n\nOpponent: {opname} \nOpponent Pokemon: {opponent_pk.capitalize()}")
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 if path == 'fight':
                     path = 'mainmenu'
+
+                if path == 'emojis':
+                    e = False
+                    r_emoji = str(random.randint(0,9)) 
+                    path = 'mainmenu'
+                    r_x =random.randint(0,950) 
+                    r_y =random.randint(0,600)
+                    pygame.mixer.Sound.play(sel_sound)
 
 
     if mainscreen == 'bgimg':
