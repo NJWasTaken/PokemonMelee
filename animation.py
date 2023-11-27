@@ -138,7 +138,11 @@ while (running):
     gui = pygame.transform.scale(gui,(1050, 187))
     speaker = pygame.image.load(os.path.join('assets','audio',sppath+'.png')).convert_alpha()
     speaker = pygame.transform.scale(speaker,(100,100))
+    r_emoji = str(random.randint(0,9))
+    emoji = pygame.image.load(os.path.join('assets','art',r_emoji+'.png')).convert_alpha()
+    emoji = pygame.transform.scale(emoji,(100,100))
     
+
     #Setting up game music
     if audio not in l:
         l.clear()
@@ -236,12 +240,17 @@ while (running):
                 if (x in range(780,1040) and y in range(565,650)):
                     pygame.mixer.Sound.play(sel_sound)
                     path = 'mainmenu'
+            
+            #Emote
+            if path == 'mainmenu' and (x in range(785,1035) and y in range(525,610)):
+                    screen.blit(emoji , [pimageX+300, pimageY])
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 if path == 'fight':
                     path = 'mainmenu'
-    
+
+
     if mainscreen == 'bgimg':
         screen.blit(gui,[0,513])
 
