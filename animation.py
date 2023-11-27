@@ -243,7 +243,7 @@ while (running):
             
             #Emote
             if path == 'mainmenu' and (x in range(785,1035) and y in range(525,610)):
-                    screen.blit(emoji , [pimageX+300, pimageY])
+                    screen.blit(emoji , [pimageX+100, pimageY])
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
