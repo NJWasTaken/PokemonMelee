@@ -122,14 +122,12 @@ def vs(x1,x2,k):
     if k == False:
         x1+=5
         x2-=5
-        print(x1,x2)
         if x1 == x2:
             k = True
-            print('centre')
     if k == True:
         x1+=10
         x2-=10
-        print(x1,x2)
+
     return x1,x2,k
 
 #Player Pokemon attack animation
