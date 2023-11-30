@@ -50,13 +50,15 @@ else:
     pkmg2 = pygame.image.load(os.path.join('assets','opp','img_front',oppath)).convert_alpha()
 pkmg2 = pygame.transform.scale(pkmg2,(200,200))
 
-#Loading battle start animation images
+#Loading battle start animation images and game title
 red = pygame.image.load(os.path.join('assets','art','red.jpeg')).convert()
 red = pygame.transform.scale(red,(width,height//2))
 blue = pygame.image.load(os.path.join('assets','art','blue.jpeg')).convert()
 blue = pygame.transform.scale(blue,(width,height//2))
 vs_img = pygame.image.load(os.path.join('assets','art','vs.png')).convert_alpha()
 vs_img = pygame.transform.scale(vs_img,(256,256))
+title = pygame.image.load(os.path.join('assets','art','title.png')).convert_alpha()
+title = pygame.transform.scale(title,(550,290))
 #Set game speed
 fpsClock = pygame.time.Clock()
 
@@ -193,8 +195,9 @@ while (running):
     #Homescreen
     if mainscreen == 'startup':
         screen.blit(exit_b,[400,600])
-        screen.blit(start_b,[400,300])
-        screen.blit(options_b,[400,400])
+        screen.blit(start_b,[400,350])
+        screen.blit(options_b,[400,450])
+        screen.blit(title,[240,30])
 
     if mainscreen == 'black':
         screen.blit(red,[vs_x1, 0])
@@ -211,7 +214,7 @@ while (running):
         vs_x1,vs_x2,vs_centre = vs(vs_x1,vs_x2,vs_centre)
         if vs_centre == True:
             screen.blit(vs_img,[400,250])
-        if vs_x1 == 1050:
+        if vs_x1 >= 1050:
             mainscreen = 'bgimg'
             path = 'mainmenu'
             vs_centre = False
@@ -242,12 +245,12 @@ while (running):
                     if op == False and selected == False:
                         pygame.mixer.Sound.play(sel_sound)
                         running = False
-                if x in range(405, 645) and y in range(310,390):
+                if x in range(405, 645) and y in range(360,440):
                     if op == False and selected == False:
                         pygame.mixer.Sound.play(sel_sound)
                         selected = True
             
-                if x in range(405, 645) and y in range(411, 485):
+                if x in range(405, 645) and y in range(461, 535):
                     pygame.mixer.Sound.play(sel_sound)
                     op = True
             if selected == True:
@@ -268,6 +271,7 @@ while (running):
                 
             if op == True:
                 if x in range(720,845) and y in range(450,495):
+                    pygame.mixer.Sound.play(sel_sound)
                     op = False
                 if x in range(235,835) and y in range(245,325):
                     pname = simpledialog.askstring(title="Player Name",prompt="What's your name?")
@@ -278,6 +282,7 @@ while (running):
                     if opname == None or opname == '' or functools.reduce(lambda x,y: x+y,list(set(list(opname)))) == ' ':
                         opname = 'Blue'
                 if x in range(235,400) and y in range(430,500): #Reset button (Needs to reset health)
+                    pygame.mixer.Sound.play(sel_sound)
                     r = random.randint(0,150)
                     pk = df.Path[r]
                     player_pk = df.Name[r]
@@ -368,6 +373,10 @@ while (running):
                     r_x =random.randint(0,950) 
                     r_y =random.randint(0,600)
                     pygame.mixer.Sound.play(sel_sound)
+                
+                if mainscreen == 'black':
+                    vs_x1 += 2000
+                    vs_x2 -= 2000
 
     #Battle Bg
     if mainscreen == 'bgimg':
