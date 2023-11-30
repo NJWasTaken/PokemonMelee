@@ -1,7 +1,7 @@
 #each class retains the __init__ unless overridden with a local __init__
 #init contains strength, weakness and null eventhough they exist as class variables locally as each pokemon can be assigned diff variables at discretion if required
 
-types = [Fire, Water, Grass, Electric, Flying, Psychic, Fighting, Rock, Poison, Bug, Ground, Ice, Normal, Dragon, Ghost, Dark, Steel, Fairy]
+types = ['Fire', 'Water', 'Grass', 'Electric', 'Flying', 'Psychic', 'Fighting', 'Rock', 'Poison', 'Bug', 'Ground', 'Ice', 'Normal', 'Dragon', 'Ghost', 'Dark', 'Steel', 'Fairy']
 
 #parent class
 class poketype:
@@ -15,73 +15,73 @@ class poketype:
 #child classes
 
 class Fire(poketype):
-  strength = [Bug, Grass, Ice, Steel]
-  weakness = [Ground, Rock, Water]
+  strength = ['Bug', 'Grass', 'Ice', 'Steel']
+  weakness = ['Ground', 'Rock', 'Water']
 
 class Water(poketype):
-  strength = [Fire, Ground, Rock]
-  weakness = [Electric, Grass]
+  strength = ['Fire', 'Ground', 'Rock']
+  weakness = ['Electric', 'Grass']
 
 class Grass(poketype):
-  strength = [Ground, Rock, Water]
-  weakness = [Bug, Fire, Flying, Ice, Poison]
+  strength = ['Ground', 'Rock', 'Water']
+  weakness = ['Bug', 'Fire', 'Flying', 'Ice', 'Poison']
 
 class Electric(poketype):
-  strength = [Flying, Water]
-  weakness = [Ground]
+  strength = ['Flying', 'Water']
+  weakness = ['Ground']
 
 class Flying(poketype):
-  strength = [Bug, Fighting, Grass]
-  weakness = [Electric, Ice, Rock]
+  strength = ['Bug', 'Fighting', 'Grass']
+  weakness = ['Electric', 'Ice', 'Rock']
 
 class Psychic(poketype):
-  strength = [Fighting, Poison]
-  weakness = [Bug, Dark, Ghost]
+  strength = ['Fighting', 'Poison']
+  weakness = ['Bug', 'Dark', 'Ghost']
 
 class Fighting(poketype):
-  strength = [Dark, Ice, Normal, Rock, Steel]
-  weakness = [Fairy, Flying, Psychic]=
+  strength = ['Dark', 'Ice', 'Normal', 'Rock', 'Steel']
+  weakness = ['Fairy', 'Flying', 'Psychic']=
 
 class Rock(poketype):
-  strength = [Bug, Fire, Flying, Ice]
-  weakness = [Fighting, Grass, Ground, Steel, Water]
+  strength = ['Bug', 'Fire', 'Flying', 'Ice']
+  weakness = ['Fighting', 'Grass', 'Ground', 'Steel', 'Water']
 
 class Poison(poketype):
-  strength = [Fairy, Grass]
-  weakness = [Ground, Psychic]
+  strength = ['Fairy', 'Grass']
+  weakness = ['Ground', 'Psychic']
 
 class Bug(poketype):
-  strength = [Grass, Dark, Psychic]
-  weakness = [Fire, Flying, Rock]
+  strength = ['Grass', 'Dark', 'Psychic']
+  weakness = ['Fire', 'Flying', 'Rock']
 
 class Ground(poketype):
-  strength = [Electric, Fire, Poison, Rock, Steel]
-  weakness = [Grass, Ice, Wate]
+  strength = ['Electric', 'Fire', 'Poison', 'Rock', 'Steel']
+  weakness = ['Grass', 'Ice', Wate]
 
 class Ice(poketype):
-  strength = [Dragon, Flying, Grass, Ground]
-  weakness = [Fighting, Fire, Rock, Steel]
+  strength = ['Dragon', 'Flying', 'Grass', 'Ground']
+  weakness = ['Fighting', 'Fire', 'Rock', 'Steel']
 
 class Normal(poketype):
   strength = []
-  weakness = [Fighting]
+  weakness = ['Fighting']
 
 class Dragon(poketype):
-  strength = [Dragon]
-  weakness = [Dragon, Fairy, Ice]
+  strength = ['Dragon']
+  weakness = ['Dragon', 'Fairy', 'Ice']
 
 class Ghost(poketype):
-  strength = [Ghost, Psychic]
-  weakness = [Dark, Ghost]
+  strength = ['Ghost', 'Psychic']
+  weakness = ['Dark', 'Ghost']
 
 class Dark(poketype):
-  strength = [Ghost, Psychic]
-  weakness = [Bug, Fairy, Fighting]
+  strength = ['Ghost', 'Psychic']
+  weakness = ['Bug', 'Fairy', 'Fighting']
 
 class Steel(poketype):
-  strength = [Fairy, Ice, Rock]
-  weakness = [Fighting, Fire, Ground]
+  strength = ['Fairy', 'Ice', 'Rock']
+  weakness = ['Fighting', 'Fire', 'Ground']
 
 class Fairy(poketype):
-  strength = [Fighting, Dark, Dragon]
-  weakness = [Poison, Steel]
+  strength = ['Fighting', 'Dark', 'Dragon']
+  weakness = ['Poison', 'Steel']
