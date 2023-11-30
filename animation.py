@@ -91,8 +91,8 @@ r_emoji = str(random.randint(0,9))
 r_x =random.randint(0,950) 
 r_y =random.randint(0,413)
 selected = False
-vs_x1 = -1050
-vs_x2 = 1050
+vs_x1 = -425
+vs_x2 = 425
 vs_centre = False
 anim_start = False
 
@@ -277,6 +277,26 @@ while (running):
                     opname = simpledialog.askstring(title="Opponent Name",prompt="What's the opponent's name?")
                     if opname == None or opname == '' or functools.reduce(lambda x,y: x+y,list(set(list(opname)))) == ' ':
                         opname = 'Blue'
+                if x in range(235,400) and y in range(430,500): #Reset button (Needs to reset health)
+                    r = random.randint(0,150)
+                    pk = df.Path[r]
+                    player_pk = df.Name[r]
+                    ptype = df.Types[r]
+
+                    r2 = random.randint(1,151)
+                    oppath=str(r2)+'.png'
+                    opponent_pk = df.Name[r2-1]
+                    optype = df.Types[r2-1]
+
+                    schance = random.randint(1,100)
+                    pkmg = pygame.image.load(os.path.join('assets','player','img_back',pk)).convert()
+                    pkmg = pygame.transform.scale(pkmg,(200,200))
+
+                    if schance == 42:
+                        pkmg2 = pygame.image.load(os.path.join('assets','opp','shiny',oppath)).convert_alpha()
+                    else:
+                        pkmg2 = pygame.image.load(os.path.join('assets','opp','img_front',oppath)).convert_alpha()
+                        pkmg2 = pygame.transform.scale(pkmg2,(200,200))
 
             #Volume
             if x in range(900,960) and y in range(70,130) and mainscreen != 'black':
@@ -349,13 +369,12 @@ while (running):
                     r_y =random.randint(0,600)
                     pygame.mixer.Sound.play(sel_sound)
 
-    #Emotes
-    if e == True:
-        screen.blit(emoji , [r_x,r_y])
-    
     #Battle Bg
     if mainscreen == 'bgimg':
         screen.blit(gui,[0,513])
+    #Emotes
+    if e == True:
+        screen.blit(emoji , [r_x,r_y])
     pygame.display.update()
     fpsClock.tick(200)
 pygame.quit()
