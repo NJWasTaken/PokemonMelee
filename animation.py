@@ -96,11 +96,11 @@ e = False
 r_emoji = str(random.randint(0,9))
 r_x =random.randint(0,950) 
 r_y =random.randint(0,413)
-selected = False
 vs_x1 = -425
 vs_x2 = 425
 vs_centre = False
 anim_start = False
+singleplayer = True
 
 #Volume 
 sppath = 'speaker'
@@ -109,8 +109,6 @@ vol = 0.5
 #Options
 optionmenu = pygame.image.load(os.path.join('assets','gui','optionmenu.png')).convert_alpha()
 optionmenu = pygame.transform.scale(optionmenu,(664,313))
-battleselect = pygame.image.load(os.path.join('assets','gui','battleselect.png')).convert_alpha()
-battleselect = pygame.transform.scale(battleselect,(664,313))
 
 #Sounds
 sel_sound = pygame.mixer.Sound(os.path.join('assets','audio','select.mp3'))
@@ -170,6 +168,8 @@ def stagger(x,y,c,p):
         p = False
     return (x,y,c,p)
 
+
+
 #Main Loop
 while (running):
     bg_img = pygame.image.load(os.path.join('assets','art',mainscreen+'.jpg')).convert()
@@ -209,9 +209,6 @@ while (running):
 
     if op == True:
         screen.blit(optionmenu,[200,200])
-
-    if selected == True:
-        screen.blit(battleselect,[200,200])
     
     #VS Animation
     if mainscreen == 'black':
@@ -246,32 +243,20 @@ while (running):
             #Homepage
             if mainscreen == 'startup':
                 if x in range(405, 645) and y in range(610, 695):
-                    if op == False and selected == False:
+                    if op == False:
                         pygame.mixer.Sound.play(sel_sound)
                         running = False
                 if x in range(405, 645) and y in range(360,440):
-                    if op == False and selected == False:
+                    if op == False:
                         pygame.mixer.Sound.play(sel_sound)
-                        selected = True
+                        mainscreen = 'black'
+                        audio = 'theme'
+                        anim_start = True
             
                 if x in range(405, 645) and y in range(461, 535):
                     pygame.mixer.Sound.play(sel_sound)
                     op = True
-            if selected == True:
-                if x in range(720,845) and y in range(450,495):
-                    selected = False
-                if x in range(235,415) and y in range(295,410): #SinglePlayer
-                    pygame.mixer.Sound.play(sel_sound)
-                    mainscreen = 'black'
-                    audio = 'theme'
-                    selected = False
-                    anim_start = True
-                if x in range(655,835) and y in range(295,410): #MultiPlayer
-                    pygame.mixer.Sound.play(sel_sound)
-                    mainscreen = 'black'
-                    audio = 'theme'
-                    selected = False
-                    anim_start = True
+                    
                 
             if op == True:
                 if x in range(720,845) and y in range(450,495):
@@ -321,9 +306,9 @@ while (running):
             #Fight
             if path == 'mainmenu' and (x in range(516,778) and y in range(525,610)):
                 if e == False:
-                    path = 'fight'
+                    path = 'fight/fight'+pokelist[r].name
             
-            if path == 'fight' and ((x in range(55,400) and y in range(555,606)) or (x in range(415,690) and y in range(555,606)) or (x in range(55,400) and y in range(615,665)) or (x in range(415,690) and y in range(615,665))):
+            if path == f'fight/fight'+pokelist[r].name and ((x in range(55,400) and y in range(555,606)) or (x in range(415,690) and y in range(555,606)) or (x in range(55,400) and y in range(615,665)) or (x in range(415,690) and y in range(615,665))):
                 pygame.mixer.Sound.play(sel_sound)
                 pattack = True
                 st = False
@@ -367,7 +352,7 @@ while (running):
                 messagebox.showinfo("Battle Stats",f"Player: {pname} \nPlayer Pokemon: {player_pk.capitalize()} \n\nOpponent: {opname} \nOpponent Pokemon: {opponent_pk.capitalize()}")
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                if path == 'fight':
+                if path == 'fight/fight'+pokelist[r].name:
                     path = 'mainmenu'
 
                 if path == 'emojis':
