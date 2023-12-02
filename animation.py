@@ -8,6 +8,8 @@ import tkinter as tk
 from tkinter import *
 from tkinter import simpledialog, ttk, messagebox
 import functools
+import pokedex
+
 #Making sure the program reads the file paths correctly 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -15,17 +17,19 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 df = pd.read_csv("PokemonData.csv")
 df["Path"]=df["Name"]+".png"
 
+#Importing the pokedex list from pokedex.py
+pokelist = pokedex.pokelist()
 #Selecting a random Player Pokemon
 r = random.randint(0,150)
 pk = df.Path[r]
 player_pk = df.Name[r]
-ptype = df.Types[r]
+ptype = pokelist[r]
 
 #Selecting a random Opponent Pokemon
 r2 = random.randint(1,151)
 oppath=str(r2)+'.png'
 opponent_pk = df.Name[r2-1]
-optype = df.Types[r2-1]
+optype = pokelist[r2-1]
 
 #Defining chance for the opponent Pokemon to be shiny (rare)
 schance = random.randint(1,100)
@@ -286,12 +290,12 @@ while (running):
                     r = random.randint(0,150)
                     pk = df.Path[r]
                     player_pk = df.Name[r]
-                    ptype = df.Types[r]
+                    ptype = pokelist[r]
 
                     r2 = random.randint(1,151)
                     oppath=str(r2)+'.png'
                     opponent_pk = df.Name[r2-1]
-                    optype = df.Types[r2-1]
+                    optype = pokelist[r2-1]
 
                     schance = random.randint(1,100)
                     pkmg = pygame.image.load(os.path.join('assets','player','img_back',pk)).convert()
