@@ -231,7 +231,6 @@ while (running):
     if mainscreen == 'bgimg':
         screen.blit(pkmg2 , [cimageX,cimageY])
         screen.blit(pkmg , [pimageX, pimageY])
-
     #User events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
