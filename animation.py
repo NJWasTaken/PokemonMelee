@@ -9,6 +9,7 @@ from tkinter import *
 from tkinter import simpledialog, ttk, messagebox
 import functools
 import pokedex
+from pyvidplayer2 import Video
 
 #Making sure the program reads the file paths correctly 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -101,6 +102,7 @@ vs_x2 = 425
 vs_centre = False
 anim_start = False
 singleplayer = True
+video = 0
 
 #Volume 
 sppath = 'speaker'
@@ -112,6 +114,7 @@ optionmenu = pygame.transform.scale(optionmenu,(664,313))
 
 #Sounds
 sel_sound = pygame.mixer.Sound(os.path.join('assets','audio','select.mp3'))
+vid = Video(os.path.join('assets','art','easter_egg.mp4'))
 
 #Buttons
 start_b = pygame.image.load(os.path.join('assets','gui','begin.png')).convert_alpha()
@@ -192,12 +195,14 @@ while (running):
     pygame.mixer.music.set_volume(vol)
 
     screen.fill((0,0,0)) #Base Layer    
-    screen.blit(bg_img,[0,0]) #Background Image
-    if mainscreen != 'black':
+    if video != 1:
+        screen.blit(bg_img,[0,0]) #Background Image
+
+    if mainscreen != 'black' and video != 1:
         screen.blit(speaker,[900,50]) #Volume
     
     #Homescreen
-    if mainscreen == 'startup':
+    if mainscreen == 'startup' and video != 1:
         screen.blit(exit_b,[400,600])
         screen.blit(start_b,[400,350])
         screen.blit(options_b,[400,450])
@@ -207,9 +212,14 @@ while (running):
         screen.blit(red,[vs_x1, 0])
         screen.blit(blue,[vs_x2,350])
 
-    if op == True:
+    if op == True and video != 1:
         screen.blit(optionmenu,[200,200])
-    
+
+    if video == 1:
+        vid.draw(screen, (0,0),force_draw=False)
+        vol = 0
+
+
     #VS Animation
     if mainscreen == 'black':
         vs_x1,vs_x2,vs_centre = vs(vs_x1,vs_x2,vs_centre)
@@ -255,20 +265,25 @@ while (running):
                 if x in range(405, 645) and y in range(461, 535):
                     pygame.mixer.Sound.play(sel_sound)
                     op = True
-                    
                 
             if op == True:
                 if x in range(720,845) and y in range(450,495):
                     pygame.mixer.Sound.play(sel_sound)
                     op = False
                 if x in range(235,835) and y in range(245,325):
+                    pygame.mixer.Sound.play(sel_sound)
                     pname = simpledialog.askstring(title="Player Name",prompt="What's your name?")
                     if pname == None or pname == ''or functools.reduce(lambda x,y: x+y,list(set(list(pname)))) == ' ':
                         pname = 'Red'
                 if x in range(235,835) and y in range(345,425):
+                    pygame.mixer.Sound.play(sel_sound)
                     opname = simpledialog.askstring(title="Opponent Name",prompt="What's the opponent's name?")
                     if opname == None or opname == '' or functools.reduce(lambda x,y: x+y,list(set(list(opname)))) == ' ':
                         opname = 'Blue'
+                if x in range(200,230) and y in range(200,230):
+                    pygame.mixer.Sound.play(sel_sound)
+                    video +=1
+
                 if x in range(235,400) and y in range(430,500): #Reset button (Needs to reset health)
                     pygame.mixer.Sound.play(sel_sound)
                     r = random.randint(0,150)
@@ -349,6 +364,7 @@ while (running):
             if path == 'mainmenu' and (x in range(516,778) and y in range(590,693)):
                 pygame.mixer.Sound.play(sel_sound)
                 messagebox.showinfo("Battle Stats",f"Player: {pname} \nPlayer Pokemon: {player_pk.capitalize()} \n\nOpponent: {opname} \nOpponent Pokemon: {opponent_pk.capitalize()}")
+ 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 if path == 'fight/fight'+pokelist[r].name:
@@ -365,6 +381,10 @@ while (running):
                 if mainscreen == 'black':
                     vs_x1 += 2000
                     vs_x2 -= 2000
+                
+                if video == 1:
+                    video += 1
+                    vol = 0.5
 
     #Battle Bg
     if mainscreen == 'bgimg':
@@ -372,6 +392,7 @@ while (running):
     #Emotes
     if e == True:
         screen.blit(emoji , [r_x,r_y])
+    
     pygame.display.update()
     fpsClock.tick(200)
 pygame.quit()
