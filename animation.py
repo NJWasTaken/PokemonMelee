@@ -9,6 +9,7 @@ from tkinter import *
 from tkinter import simpledialog, ttk, messagebox
 import functools
 import pokedex
+from pyvidplayer2 import Video
 
 #Making sure the program reads the file paths correctly 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -96,11 +97,12 @@ e = False
 r_emoji = str(random.randint(0,9))
 r_x =random.randint(0,950) 
 r_y =random.randint(0,413)
-selected = False
 vs_x1 = -425
 vs_x2 = 425
 vs_centre = False
 anim_start = False
+singleplayer = True
+video = 0
 
 #Volume 
 sppath = 'speaker'
@@ -109,11 +111,10 @@ vol = 0.5
 #Options
 optionmenu = pygame.image.load(os.path.join('assets','gui','optionmenu.png')).convert_alpha()
 optionmenu = pygame.transform.scale(optionmenu,(664,313))
-battleselect = pygame.image.load(os.path.join('assets','gui','battleselect.png')).convert_alpha()
-battleselect = pygame.transform.scale(battleselect,(664,313))
 
 #Sounds
 sel_sound = pygame.mixer.Sound(os.path.join('assets','audio','select.mp3'))
+vid = Video(os.path.join('assets','art','easter_egg.mp4'))
 
 #Buttons
 start_b = pygame.image.load(os.path.join('assets','gui','begin.png')).convert_alpha()
@@ -170,6 +171,8 @@ def stagger(x,y,c,p):
         p = False
     return (x,y,c,p)
 
+
+
 #Main Loop
 while (running):
     bg_img = pygame.image.load(os.path.join('assets','art',mainscreen+'.jpg')).convert()
@@ -192,12 +195,14 @@ while (running):
     pygame.mixer.music.set_volume(vol)
 
     screen.fill((0,0,0)) #Base Layer    
-    screen.blit(bg_img,[0,0]) #Background Image
-    if mainscreen != 'black':
+    if video != 1:
+        screen.blit(bg_img,[0,0]) #Background Image
+
+    if mainscreen != 'black' and video != 1:
         screen.blit(speaker,[900,50]) #Volume
     
     #Homescreen
-    if mainscreen == 'startup':
+    if mainscreen == 'startup' and video != 1:
         screen.blit(exit_b,[400,600])
         screen.blit(start_b,[400,350])
         screen.blit(options_b,[400,450])
@@ -207,12 +212,14 @@ while (running):
         screen.blit(red,[vs_x1, 0])
         screen.blit(blue,[vs_x2,350])
 
-    if op == True:
+    if op == True and video != 1:
         screen.blit(optionmenu,[200,200])
 
-    if selected == True:
-        screen.blit(battleselect,[200,200])
-    
+    if video == 1:
+        vid.draw(screen, (0,0),force_draw=False)
+        vol = 0
+
+
     #VS Animation
     if mainscreen == 'black':
         vs_x1,vs_x2,vs_centre = vs(vs_x1,vs_x2,vs_centre)
@@ -234,7 +241,6 @@ while (running):
     if mainscreen == 'bgimg':
         screen.blit(pkmg2 , [cimageX,cimageY])
         screen.blit(pkmg , [pimageX, pimageY])
-
     #User events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -246,45 +252,38 @@ while (running):
             #Homepage
             if mainscreen == 'startup':
                 if x in range(405, 645) and y in range(610, 695):
-                    if op == False and selected == False:
+                    if op == False:
                         pygame.mixer.Sound.play(sel_sound)
                         running = False
                 if x in range(405, 645) and y in range(360,440):
-                    if op == False and selected == False:
+                    if op == False:
                         pygame.mixer.Sound.play(sel_sound)
-                        selected = True
+                        mainscreen = 'black'
+                        audio = 'theme'
+                        anim_start = True
             
                 if x in range(405, 645) and y in range(461, 535):
                     pygame.mixer.Sound.play(sel_sound)
                     op = True
-            if selected == True:
-                if x in range(720,845) and y in range(450,495):
-                    selected = False
-                if x in range(235,415) and y in range(295,410): #SinglePlayer
-                    pygame.mixer.Sound.play(sel_sound)
-                    mainscreen = 'black'
-                    audio = 'theme'
-                    selected = False
-                    anim_start = True
-                if x in range(655,835) and y in range(295,410): #MultiPlayer
-                    pygame.mixer.Sound.play(sel_sound)
-                    mainscreen = 'black'
-                    audio = 'theme'
-                    selected = False
-                    anim_start = True
                 
             if op == True:
                 if x in range(720,845) and y in range(450,495):
                     pygame.mixer.Sound.play(sel_sound)
                     op = False
                 if x in range(235,835) and y in range(245,325):
+                    pygame.mixer.Sound.play(sel_sound)
                     pname = simpledialog.askstring(title="Player Name",prompt="What's your name?")
                     if pname == None or pname == ''or functools.reduce(lambda x,y: x+y,list(set(list(pname)))) == ' ':
                         pname = 'Red'
                 if x in range(235,835) and y in range(345,425):
+                    pygame.mixer.Sound.play(sel_sound)
                     opname = simpledialog.askstring(title="Opponent Name",prompt="What's the opponent's name?")
                     if opname == None or opname == '' or functools.reduce(lambda x,y: x+y,list(set(list(opname)))) == ' ':
                         opname = 'Blue'
+                if x in range(200,230) and y in range(200,230):
+                    pygame.mixer.Sound.play(sel_sound)
+                    video +=1
+
                 if x in range(235,400) and y in range(430,500): #Reset button (Needs to reset health)
                     pygame.mixer.Sound.play(sel_sound)
                     r = random.randint(0,150)
@@ -321,9 +320,9 @@ while (running):
             #Fight
             if path == 'mainmenu' and (x in range(516,778) and y in range(525,610)):
                 if e == False:
-                    path = 'fight'
+                    path = 'fight/fight'+pokelist[r].name
             
-            if path == 'fight' and ((x in range(55,400) and y in range(555,606)) or (x in range(415,690) and y in range(555,606)) or (x in range(55,400) and y in range(615,665)) or (x in range(415,690) and y in range(615,665))):
+            if path == f'fight/fight'+pokelist[r].name and ((x in range(55,400) and y in range(555,606)) or (x in range(415,690) and y in range(555,606)) or (x in range(55,400) and y in range(615,665)) or (x in range(415,690) and y in range(615,665))):
                 pygame.mixer.Sound.play(sel_sound)
                 pattack = True
                 st = False
@@ -365,9 +364,10 @@ while (running):
             if path == 'mainmenu' and (x in range(516,778) and y in range(590,693)):
                 pygame.mixer.Sound.play(sel_sound)
                 messagebox.showinfo("Battle Stats",f"Player: {pname} \nPlayer Pokemon: {player_pk.capitalize()} \n\nOpponent: {opname} \nOpponent Pokemon: {opponent_pk.capitalize()}")
+ 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                if path == 'fight':
+                if path == 'fight/fight'+pokelist[r].name:
                     path = 'mainmenu'
 
                 if path == 'emojis':
@@ -381,6 +381,10 @@ while (running):
                 if mainscreen == 'black':
                     vs_x1 += 2000
                     vs_x2 -= 2000
+                
+                if video == 1:
+                    video += 1
+                    vol = 0.5
 
     #Battle Bg
     if mainscreen == 'bgimg':
@@ -388,6 +392,7 @@ while (running):
     #Emotes
     if e == True:
         screen.blit(emoji , [r_x,r_y])
+    
     pygame.display.update()
     fpsClock.tick(200)
 pygame.quit()

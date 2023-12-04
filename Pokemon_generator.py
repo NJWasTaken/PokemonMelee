@@ -1,4 +1,5 @@
 import csv
+import pokedex
 
 class Pokemon:
     def __init__(self, name, types, moves, EVs, health=100):
