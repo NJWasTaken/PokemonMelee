@@ -10,6 +10,18 @@ from tkinter import simpledialog, ttk, messagebox
 import functools
 import pokedex
 from pyvidplayer2 import Video
+import time
+import sys
+
+
+def delay(s):
+    for c in s:
+        sys.stdout.write(c)
+        sys.stdout.flush()
+        time.sleep(0.05)
+
+#Importing the pokedex list from pokedex.py
+typelist = pokedex.typelist()
 
 #Making sure the program reads the file paths correctly 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -18,19 +30,38 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 df = pd.read_csv("PokemonData.csv")
 df["Path"]=df["Name"]+".png"
 
-#Importing the pokedex list from pokedex.py
-pokelist = pokedex.pokelist()
 #Selecting a random Player Pokemon
 r = random.randint(0,150)
 pk = df.Path[r]
 player_pk = df.Name[r]
-ptype = pokelist[r]
+ptype = typelist[r]
+p_stats = pokedex.pokedata.iloc[r]
 
 #Selecting a random Opponent Pokemon
 r2 = random.randint(1,151)
 oppath=str(r2)+'.png'
 opponent_pk = df.Name[r2-1]
-optype = pokelist[r2-1]
+optype = typelist[r2-1]
+op_stats = pokedex.pokedata.iloc[r2-1]
+
+#Logic
+if ptype.name in optype.strength:
+    op_stats['Attack']*=2
+
+if ptype.name in optype.weakness:
+    op_stats['Attack']/=2
+    
+if ptype.name in optype.null:
+    op_stats['Attack']=0
+
+if optype.name in ptype.strength:
+    p_stats['Attack']*=2
+
+if optype.name in ptype.weakness:
+    p_stats['Attack']/=2
+
+if optype.name in ptype.null:
+    p_stats['Attack']=0
 
 #Defining chance for the opponent Pokemon to be shiny (rare)
 schance = random.randint(1,100)
@@ -40,7 +71,7 @@ pygame.init()
 pygame.mixer.init()
 
 #Setting canvas size
-width=1050;
+width=1050
 height=700
 screen = pygame.display.set_mode( (width, height) )
 
@@ -73,10 +104,10 @@ root.iconbitmap(os.path.join('assets','art','icon.ico'))
 root.withdraw()
 
 #Setting variables for the positions of the two Pokemon
-pimageX= 190;
-pimageY= 360; 
-cimageX=580;
-cimageY=220;
+pimageX= 190
+pimageY= 360 
+cimageX=580
+cimageY=220
 
 #Setting variables for game states
 op = False
@@ -143,11 +174,11 @@ def attan(x,y,c,s):
         c=0
 
     if x<240 and c!=0:
-        x += 1 ;
+        x += 1
         y -= 0.2
 
     if c==0 and x>190:
-        x-=1;
+        x-=1
         y+=0.2
     
     if c==0 and x<=190:
@@ -160,11 +191,11 @@ def stagger(x,y,c,p):
         c=0
 
     if x<610 and c!=0:
-        x += 1 ;
+        x += 1
         y -= 0.5
 
     if c==0 and x>580:
-        x-=1;
+        x-=1
         y+=0.5
     
     if c==0 and x<=580:
@@ -181,7 +212,8 @@ while (running):
     gui = pygame.transform.scale(gui,(1050, 187))
     speaker = pygame.image.load(os.path.join('assets','audio',sppath+'.png')).convert_alpha()
     speaker = pygame.transform.scale(speaker,(100,100))
-    
+    p_health = font.render(str(p_stats['HP']), True, (255,255,255))
+    op_health= font.render(str(op_stats['HP']),True,(255,255,255))
     emoji = pygame.image.load(os.path.join('assets','art',r_emoji+'.png')).convert_alpha()
     emoji = pygame.transform.scale(emoji,(100,100))
     
@@ -241,6 +273,9 @@ while (running):
     if mainscreen == 'bgimg':
         screen.blit(pkmg2 , [cimageX,cimageY])
         screen.blit(pkmg , [pimageX, pimageY])
+        screen.blit(p_health, [130,340])
+        screen.blit(op_health, [720,200])
+        
     #User events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -286,15 +321,36 @@ while (running):
 
                 if x in range(235,400) and y in range(430,500): #Reset button (Needs to reset health)
                     pygame.mixer.Sound.play(sel_sound)
+
                     r = random.randint(0,150)
                     pk = df.Path[r]
                     player_pk = df.Name[r]
-                    ptype = pokelist[r]
+                    ptype = typelist[r]
+                    p_stats = pokedex.pokedata.iloc[r]
 
                     r2 = random.randint(1,151)
                     oppath=str(r2)+'.png'
                     opponent_pk = df.Name[r2-1]
-                    optype = pokelist[r2-1]
+                    optype = typelist[r2-1]
+                    op_stats = pokedex.pokedata.iloc[r2-1]
+
+                    if ptype.name in optype.strength:
+                        op_stats['Attack']*=2
+
+                    if ptype.name in optype.weakness:
+                        op_stats['Attack']/=2
+                        
+                    if ptype.name in optype.null:
+                        op_stats['Attack']=0
+
+                    if optype.name in ptype.strength:
+                        p_stats['Attack']*=2
+
+                    if optype.name in ptype.weakness:
+                        p_stats['Attack']/=2
+
+                    if optype.name in ptype.null:
+                        p_stats['Attack']=0
 
                     schance = random.randint(1,100)
                     pkmg = pygame.image.load(os.path.join('assets','player','img_back',pk)).convert()
@@ -320,14 +376,20 @@ while (running):
             #Fight
             if path == 'mainmenu' and (x in range(516,778) and y in range(525,610)):
                 if e == False:
-                    path = 'fight/fight'+pokelist[r].name
+                    path = 'fight/fight'+typelist[r].name
+
             
-            if path == f'fight/fight'+pokelist[r].name and ((x in range(55,400) and y in range(555,606)) or (x in range(415,690) and y in range(555,606)) or (x in range(55,400) and y in range(615,665)) or (x in range(415,690) and y in range(615,665))):
+            if path == f'fight/fight'+typelist[r].name and ((x in range(55,400) and y in range(555,606)) or (x in range(415,690) and y in range(555,606)) or (x in range(55,400) and y in range(615,665)) or (x in range(415,690) and y in range(615,665))):
                 pygame.mixer.Sound.play(sel_sound)
                 pattack = True
                 st = False
                 hasatt = 1
                 hasstag = 1
+                
+                op_stats['HP']-=p_stats['Attack']
+                p_stats['HP']-=op_stats['Attack']
+                
+                
 
             #Run
             if path == 'mainmenu' and (x in range(780,1040) and y in range(590,693)):
@@ -363,11 +425,11 @@ while (running):
             #Scan
             if path == 'mainmenu' and (x in range(516,778) and y in range(590,693)):
                 pygame.mixer.Sound.play(sel_sound)
-                messagebox.showinfo("Battle Stats",f"Player: {pname} \nPlayer Pokemon: {player_pk.capitalize()} \n\nOpponent: {opname} \nOpponent Pokemon: {opponent_pk.capitalize()}")
+                messagebox.showinfo("Battle Stats",f"Player: {pname} \nPlayer Pokemon: {player_pk.capitalize()} \nPokemon Health: {p_stats['HP']} \nPokemon Attack: {p_stats['Attack']} \nPokemon Type: {ptype.name} \n\nOpponent: {opname} \nOpponent Pokemon: {opponent_pk.capitalize()} \nOpponent Health: {op_stats['HP']} \nOpponent Attack: {op_stats['Attack']} \nOpponent Type: {optype.name} ")
  
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                if path == 'fight/fight'+pokelist[r].name:
+                if path == 'fight/fight'+typelist[r].name:
                     path = 'mainmenu'
 
                 if path == 'emojis':
@@ -385,6 +447,14 @@ while (running):
                 if video == 1:
                     video += 1
                     vol = 0.5
+    
+    if p_stats['HP'] >= 0 and op_stats['HP']<=0: 
+        mainscreen = 'win'
+    elif p_stats['HP'] <= 0 and op_stats['HP']<=0:
+        mainscreen = 'tie'
+    elif p_stats['HP'] <= 0 and op_stats['HP']>=0:
+        mainscreen = 'lose'
+        
 
     #Battle Bg
     if mainscreen == 'bgimg':

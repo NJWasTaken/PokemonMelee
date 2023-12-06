@@ -18,11 +18,6 @@ class poketype:
     self.reg = reg #1x damage
     return self.reg
   
-  def stats(self, attack, defence, HP):
-    self.HP = HP
-    self.attack = attack
-    self.defence = defence
-  
 #child classes
 
 class Normal(poketype):
@@ -267,20 +262,23 @@ dragonite=Dragon
 mewtwo=Psychic
 mew=Psychic
 
-def pokelist():
+def typelist():
   l = [bulbasaur,ivysaur,venusaur,charmander,charmeleon,charizard,squirtle,wartortle,blastoise,caterpie,metapod,butterfree,weedle,kakuna,beedrill,pidgey,pidgeotto,pidgeot,rattata,raticate,spearow,fearow,ekans,arbok,pikachu,raichu,sandshrew,sandslash,nidoran_f,nidorina,nidoqueen,nidoran_m,nidorino,nidoking,clefairy,clefable,vulpix,ninetales,jigglypuff,wigglytuff,zubat,golbat,oddish,gloom,vileplume,paras,parasect,venonat,venomoth,diglett,dugtrio,meowth,persian,psyduck,golduck,mankey,primeape,growlithe,arcanine,poliwag,poliwhirl,poliwrath,abra,kadabra,alakazam,machop,machoke,machamp,bellsprout,weepinbell,victreebel,tentacool,tentacruel,geodude,graveler,golem,ponyta,rapidash,slowpoke,slowbro,magnemite,magneton,farfetchd,doduo,dodrio,seel,dewgong,grimer,muk,shellder,cloyster,gastly,haunter,gengar,onix,drowzee,hypno,krabby,kingler,voltorb,electrode,exeggcute,exeggutor,cubone,marowak,hitmonlee,hitmonchan,lickitung,koffing,weezing,rhyhorn,rhydon,chansey,tangela,kangaskhan,horsea,seadra,goldeen,seaking,staryu,starmie,mr_mime,scyther,jynx,electabuzz,magmar,pinsir,tauros,magikarp,gyarados,lapras,ditto,eevee,vaporeon,jolteon,flareon,porygon,omanyte,omastar,kabuto,kabutops,aerodactyl,snorlax,articuno,zapdos,moltres,dratini,dragonair,dragonite,mewtwo,mew]
   return l
 
-l = pokelist()
 df = pd.read_csv('PokemonData.csv')
-for i in range(151):
-  l[i].stats(l[i],df.Attack[i],df.Defense[i],df.HP[i])
+pokedata = pd.DataFrame(columns=['Name','Type','Attack','HP'])
+pokedata['Name']= df['Name']
+pokedata['Type']= typelist()
+pokedata['Attack']= list(map(lambda x: x//5,df['Attack']))
+pokedata['HP']= list(map(lambda x: x*2,df['HP']))
 
+def name():
+  return pokedata['Name']
 
-# l1 = pokelist()
-# print(l1[0].name)
-# print(l1[0].strength)
-# print(l1[0].weakness)
-# print(l1[0].null)
-# print(l1[0].regular(l1[0]))
-# print(moltres.HP)
+def attack():
+  return pokedata['Attack']
+
+def hp():
+  return pokedata['HP']
+
