@@ -3,6 +3,7 @@ import numpy as np
 import sys
 import pokedex
 import random
+#from Pokemon_generator import *
 
 def delay(s):
     for c in s:
@@ -11,7 +12,7 @@ def delay(s):
         time.sleep(0.05)
 
 class Pokemon:
-    def __init__(self,name,types,moves,EVs,health=100):
+    def __init__(self,name,types,moves,EVs,health=500):
         self.name = name
         self.types = types
         self.moves = moves
@@ -687,10 +688,12 @@ class Pokemon:
             else:
                 str1 = '\n...'
                 str2 = '\n...'
+                
         
         
 def oneplayer(self,Pokemon2):
     global str1,str2
+    money = np.random.choice(10000)
     while (self.hp > 0) and (Pokemon2.hp > 0):
         print(f"\n{self.name}\t\tHP\t{self.health}\n")
         print(f"{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
@@ -710,11 +713,11 @@ def oneplayer(self,Pokemon2):
 
         delay(str1)
 
-        Pokemon2.hp -= self.att//2
-        Pokemon2.health = -100
+        Pokemon2.hp -= self.att//3
+        Pokemon2.health = -500
 
         for j in range(int(Pokemon2.hp+0.1*Pokemon2.defn)):
-            Pokemon2.health += 10
+            Pokemon2.health += 50
 
         time.sleep(1)
         
@@ -724,6 +727,7 @@ def oneplayer(self,Pokemon2):
             print(f"\n{self.name}\t\tHP\t0\n")
             print(f"\n{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
             delay(self.name+' has fainted ...')
+ 
             break
         if Pokemon2.health>=0:
             print(f"\n{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
@@ -731,6 +735,7 @@ def oneplayer(self,Pokemon2):
             print(f"\n{self.name}\t\tHP\t{self.health}\n")
             print(f"\n{Pokemon2.name}\t\tHP\t0\n")
             delay(Pokemon2.name+' has fainted ...')
+
             break
 
         time.sleep(0.5)
@@ -753,11 +758,11 @@ def oneplayer(self,Pokemon2):
 
         delay(str2)
 
-        self.hp -= Pokemon2.att//2
-        self.health = -100
+        self.hp -= Pokemon2.att//3
+        self.health = -500
 
         for j in range(int(self.hp+0.1*self.defn)):
-            self.health += 10
+            self.health += 50
 
         time.sleep(1)
         
@@ -767,6 +772,7 @@ def oneplayer(self,Pokemon2):
             print(f"\n{self.name}\t\tHP\t0\n")
             print(f"\n{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
             delay(self.name+' has fainted ...')
+
             break
         if Pokemon2.health>=0:
             print(f"\n{Pokemon2.name}\t\tHP\t{Pokemon2.health}\n")
@@ -774,15 +780,18 @@ def oneplayer(self,Pokemon2):
             print(f"\n{self.name}\t\tHP\t{self.health}\n")
             print(f"\n{Pokemon2.name}\t\tHP\t0\n")
             delay(Pokemon2.name+' has fainted ...')
+
             break
 
         time.sleep(0.5)
 
         
-    money = np.random.choice(10000)
-    delay(f"\nOpponent paid you {money}!\n")
+    if Pokemon2.health>=0:
+        delay(f"\nYou paid opponent {money}!\n") 
+    elif self.health>=0:
+        delay(f"\nOpponent paid you {money}!\n")
     
-def twoplayer(self,Pokemon2):
+'''def twoplayer(self,Pokemon2):
     global str1,str2
     while (self.hp > 0) and (Pokemon2.hp > 0):
         print(f"\n{self.name}\t\tHP\t{self.health}\n")
@@ -803,11 +812,11 @@ def twoplayer(self,Pokemon2):
 
         delay(str1)
 
-        Pokemon2.hp -= self.att//2
-        Pokemon2.health = -100
+        Pokemon2.hp -= self.att//3
+        Pokemon2.health = -500
 
         for j in range(int(Pokemon2.hp+0.1*Pokemon2.defn)):
-            Pokemon2.health += 10
+            Pokemon2.health += 50
 
         time.sleep(1)
         
@@ -846,11 +855,11 @@ def twoplayer(self,Pokemon2):
 
         delay(str2)
 
-        self.hp -= Pokemon2.att//2
-        self.health = -100
+        self.hp -= Pokemon2.att//3
+        self.health = -500
 
         for j in range(int(self.hp+0.1*self.defn)):
-            self.health += 10
+            self.health += 50
 
         time.sleep(1)
         
@@ -870,34 +879,35 @@ def twoplayer(self,Pokemon2):
             break
 
         time.sleep(0.5)
-
         
-    money = np.random.choice(10000)
-    delay(f"\nOpponent paid you {money}!\n")
+    if Pokemon2.health>=0:
+        delay(f"\nPlayer1 paid player2 {money}!\n") 
+    elif self.health>=0:
+        delay(f"\nPlayer2 paid player1 {money}!\n")'''
+        
 
 
 
 if __name__ == '__main__':
-    Charizard = Pokemon('Charizard','Fire',['Flamethrower','Fly','Blast Burn','Fire Punch'],{'ATTACK':12,'DEFENCE':18})
+    '''Charizard = Pokemon('Charizard','Fire',['Flamethrower','Fly','Blast Burn','Fire Punch'],{'ATTACK':12,'DEFENCE':18})
     Blastoise = Pokemon('Blastoise','Water',['Water Pulse','Surf','Hydro Pump','Bubble Beam'],{'ATTACK':10,'DEFENCE':10})
-    Venusaur = Pokemon('Venusaur','Grass',['Vine Whip','Razor Leaf','Magical Leaf','Stomp'],{'ATTACK':8,'DEFENCE':12})
+    Venusaur = Pokemon('Venusaur','Grass',['Vine Whip','Razor Leaf','Magical Leaf','Stomp'],{'ATTACK':8,'DEFENCE':12})'''
 
-    l = [Charizard,Blastoise,Venusaur]
-    p1 = np.random.choice(l)
-    p2 = np.random.choice(l)
+    pokemon_list=pokedex.pokelist()
+    p1=np.random.choice(pokemon_list)
+    p2=np.random.choice(pokemon_list)
     while p1 == p2:
-        p1 = np.random.choice(l)
-    p1.fight(p2)
+        p1 = np.random.choice(pokemon_list)
+    p=Pokemon(p1)
+    p.fight(p2)
     
 while True:
-    x=input('One player or 2 player mode? 3 to exit')
+    x=input('click 1 to play and 2 to exit')
     if x=='1':
         oneplayer(p1,p2)
         break
+
     elif x=='2':
-        twoplayer(p1,p2)
-        break
-    elif x=='3':
         break
     else:
         print('invalid input')
