@@ -10,15 +10,6 @@ from tkinter import simpledialog, ttk, messagebox
 import functools
 import pokedex
 from pyvidplayer2 import Video
-import time
-import sys
-
-
-def delay(s):
-    for c in s:
-        sys.stdout.write(c)
-        sys.stdout.flush()
-        time.sleep(0.05)
 
 #Importing the pokedex list from pokedex.py
 typelist = pokedex.typelist()
@@ -230,7 +221,7 @@ while (running):
     if video != 1:
         screen.blit(bg_img,[0,0]) #Background Image
 
-    if mainscreen != 'black' and video != 1:
+    if mainscreen not in ['black','win','lose','tie'] and video != 1:
         screen.blit(speaker,[900,50]) #Volume
     
     #Homescreen
@@ -363,7 +354,7 @@ while (running):
                         pkmg2 = pygame.transform.scale(pkmg2,(200,200))
 
             #Volume
-            if x in range(900,960) and y in range(70,130) and mainscreen != 'black':
+            if x in range(900,960) and y in range(70,130) and mainscreen not in ['black','lose','tie','win']:
                 if e == False:
                     if vol == 0:
                         sppath = 'speaker'
@@ -385,10 +376,10 @@ while (running):
                 st = False
                 hasatt = 1
                 hasstag = 1
-                
-                op_stats['HP']-=p_stats['Attack']
-                p_stats['HP']-=op_stats['Attack']
-                
+                r_a = random.randint(-5,5)
+                r_a1 = random.randint(-5,5)
+                op_stats['HP']-=p_stats['Attack']+r_a
+                p_stats['HP']-=op_stats['Attack']+r_a1
                 
 
             #Run
@@ -405,6 +396,7 @@ while (running):
                 if (x in range(780,1040) and y in range(565,650)):
                     pygame.mixer.Sound.play(sel_sound)
                     path = 'mainmenu'
+
             
             #Emote
             if path == 'mainmenu' and (x in range(785,1035) and y in range(525,610)):
@@ -422,10 +414,17 @@ while (running):
                     r_y =random.randint(0,600)
                     pygame.mixer.Sound.play(sel_sound)
 
+
             #Scan
             if path == 'mainmenu' and (x in range(516,778) and y in range(590,693)):
                 pygame.mixer.Sound.play(sel_sound)
                 messagebox.showinfo("Battle Stats",f"Player: {pname} \nPlayer Pokemon: {player_pk.capitalize()} \nPokemon Health: {p_stats['HP']} \nPokemon Attack: {p_stats['Attack']} \nPokemon Type: {ptype.name} \n\nOpponent: {opname} \nOpponent Pokemon: {opponent_pk.capitalize()} \nOpponent Health: {op_stats['HP']} \nOpponent Attack: {op_stats['Attack']} \nOpponent Type: {optype.name} ")
+
+            if mainscreen in ['win','lose','tie']:
+                if x in range(405, 645) and y in range(610, 695):
+                    pygame.mixer.Sound.play(sel_sound)
+                    mainscreen = 'startup'
+                    audio = 'home'
  
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
@@ -450,11 +449,13 @@ while (running):
     
     if p_stats['HP'] >= 0 and op_stats['HP']<=0: 
         mainscreen = 'win'
+        audio = 'win'
     elif p_stats['HP'] <= 0 and op_stats['HP']<=0:
         mainscreen = 'tie'
+        audio = 'tie'
     elif p_stats['HP'] <= 0 and op_stats['HP']>=0:
         mainscreen = 'lose'
-        
+        audio = 'lose'
 
     #Battle Bg
     if mainscreen == 'bgimg':
