@@ -40,7 +40,7 @@ if ptype.name in optype.strength:
     op_stats['Attack']*=2
 
 if ptype.name in optype.weakness:
-    op_stats['Attack']/=2
+    op_stats['Attack']//=2
     
 if ptype.name in optype.null:
     op_stats['Attack']=0
@@ -49,7 +49,7 @@ if optype.name in ptype.strength:
     p_stats['Attack']*=2
 
 if optype.name in ptype.weakness:
-    p_stats['Attack']/=2
+    p_stats['Attack']//=2
 
 if optype.name in ptype.null:
     p_stats['Attack']=0
@@ -104,7 +104,7 @@ cimageY=220
 op = False
 pname = 'Red'
 opname = 'Blue'
-font = pygame.font.Font(None, 32)
+font = pygame.font.Font(os.path.join('assets','pokemon_fire_red.ttf'), 28)
 running = True
 hasatt=1
 hasstag=1
@@ -125,7 +125,8 @@ vs_centre = False
 anim_start = False
 singleplayer = True
 video = 0
-
+p_maxhealth = p_stats['HP']
+o_maxhealth = op_stats['HP']
 #Volume 
 sppath = 'speaker'
 vol = 0.5
@@ -162,6 +163,7 @@ def vs(x1,x2,k):
 #Player Pokemon attack animation
 def attan(x,y,c,s):
     if x >= 240:
+        op_stats['HP']-=p_stats['Attack']+r_a
         c=0
 
     if x<240 and c!=0:
@@ -188,12 +190,11 @@ def stagger(x,y,c,p):
     if c==0 and x>580:
         x-=1
         y+=0.5
-    
+
     if c==0 and x<=580:
         p = False
+        p_stats['HP']-=op_stats['Attack']+r_a1
     return (x,y,c,p)
-
-
 
 #Main Loop
 while (running):
@@ -203,12 +204,22 @@ while (running):
     gui = pygame.transform.scale(gui,(1050, 187))
     speaker = pygame.image.load(os.path.join('assets','audio',sppath+'.png')).convert_alpha()
     speaker = pygame.transform.scale(speaker,(100,100))
-    p_health = font.render(str(p_stats['HP']), True, (255,255,255))
-    op_health= font.render(str(op_stats['HP']),True,(255,255,255))
+    p_health = font.render(str(int((p_stats['HP']/p_maxhealth)*100))+'%', True, (255,255,255))
+    op_health= font.render(str(int((op_stats['HP']/o_maxhealth)*100))+'%',True,(255,255,255))
     emoji = pygame.image.load(os.path.join('assets','art',r_emoji+'.png')).convert_alpha()
     emoji = pygame.transform.scale(emoji,(100,100))
-    
-
+    if p_stats['HP']>=1:
+        p_hb = (p_stats['HP']/p_maxhealth)*180
+    else:
+        p_hb = 1
+    if op_stats['HP']>=1:
+        o_hb = (op_stats['HP']/o_maxhealth)*117
+    else:
+        o_hb = 1
+    player_healthbar = pygame.image.load(os.path.join('assets','gui','hp'+'.png')).convert_alpha()
+    player_healthbar = pygame.transform.scale(player_healthbar,(p_hb,18))
+    opponent_healthbar = pygame.image.load(os.path.join('assets','gui','hp'+'.png')).convert_alpha()
+    opponent_healthbar = pygame.transform.scale(opponent_healthbar,(o_hb,18))
     #Setting up game music
     if audio not in l:
         l.clear()
@@ -252,9 +263,22 @@ while (running):
             mainscreen = 'bgimg'
             path = 'mainmenu'
             vs_centre = False
+    
+    if mainscreen in ['win','lose','tie']:
+        screen.blit(exit_b,[400,600])
 
     #Player attack event
     if pattack == True:
+        if p_stats['HP'] >= 0 and op_stats['HP']<=0: 
+            mainscreen = 'win'
+            audio = 'win'
+        elif p_stats['HP'] <= 0 and op_stats['HP']<=0:
+            mainscreen = 'tie'
+            audio = 'tie'
+        elif p_stats['HP'] <= 0 and op_stats['HP']>=0:
+            mainscreen = 'lose'
+            audio = 'lose'
+
         if st == False:
             pimageX,pimageY,hasatt,st=attan(pimageX,pimageY,hasatt,st)
         else:
@@ -264,9 +288,10 @@ while (running):
     if mainscreen == 'bgimg':
         screen.blit(pkmg2 , [cimageX,cimageY])
         screen.blit(pkmg , [pimageX, pimageY])
-        screen.blit(p_health, [130,340])
-        screen.blit(op_health, [720,200])
-        
+        screen.blit(player_healthbar, [90,317])
+        screen.blit(opponent_healthbar, [905,207])
+        screen.blit(p_health, [150,313])
+        screen.blit(op_health, [940,203])
     #User events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -274,7 +299,7 @@ while (running):
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
-            #print('x:',x,',y:',y)
+            print('x:',x,',y:',y)
             #Homepage
             if mainscreen == 'startup':
                 if x in range(405, 645) and y in range(610, 695):
@@ -352,6 +377,9 @@ while (running):
                     else:
                         pkmg2 = pygame.image.load(os.path.join('assets','opp','img_front',oppath)).convert_alpha()
                         pkmg2 = pygame.transform.scale(pkmg2,(200,200))
+                    
+                    p_maxhealth = p_stats['HP']
+                    o_maxhealth = op_stats['HP']
 
             #Volume
             if x in range(900,960) and y in range(70,130) and mainscreen not in ['black','lose','tie','win']:
@@ -378,9 +406,8 @@ while (running):
                 hasstag = 1
                 r_a = random.randint(-5,5)
                 r_a1 = random.randint(-5,5)
-                op_stats['HP']-=p_stats['Attack']+r_a
-                p_stats['HP']-=op_stats['Attack']+r_a1
-                
+                op_stats['HP']-=0
+                p_stats['HP']-=0
 
             #Run
             if path == 'mainmenu' and (x in range(780,1040) and y in range(590,693)):
@@ -421,11 +448,53 @@ while (running):
                 messagebox.showinfo("Battle Stats",f"Player: {pname} \nPlayer Pokemon: {player_pk.capitalize()} \nPokemon Health: {p_stats['HP']} \nPokemon Attack: {p_stats['Attack']} \nPokemon Type: {ptype.name} \n\nOpponent: {opname} \nOpponent Pokemon: {opponent_pk.capitalize()} \nOpponent Health: {op_stats['HP']} \nOpponent Attack: {op_stats['Attack']} \nOpponent Type: {optype.name} ")
 
             if mainscreen in ['win','lose','tie']:
-                if x in range(405, 645) and y in range(610, 695):
+                if x in range(400, 670) and y in range(600, 695):
                     pygame.mixer.Sound.play(sel_sound)
                     mainscreen = 'startup'
                     audio = 'home'
- 
+                    r = random.randint(0,150)
+                    pk = df.Path[r]
+                    player_pk = df.Name[r]
+                    ptype = typelist[r]
+                    p_stats = pokedex.pokedata.iloc[r]
+
+                    r2 = random.randint(1,151)
+                    oppath=str(r2)+'.png'
+                    opponent_pk = df.Name[r2-1]
+                    optype = typelist[r2-1]
+                    op_stats = pokedex.pokedata.iloc[r2-1]
+
+                    if ptype.name in optype.strength:
+                        op_stats['Attack']*=2
+
+                    if ptype.name in optype.weakness:
+                        op_stats['Attack']/=2
+                        
+                    if ptype.name in optype.null:
+                        op_stats['Attack']=0
+
+                    if optype.name in ptype.strength:
+                        p_stats['Attack']*=2
+
+                    if optype.name in ptype.weakness:
+                        p_stats['Attack']/=2
+
+                    if optype.name in ptype.null:
+                        p_stats['Attack']=0
+
+                    schance = random.randint(1,100)
+                    pkmg = pygame.image.load(os.path.join('assets','player','img_back',pk)).convert()
+                    pkmg = pygame.transform.scale(pkmg,(200,200))
+
+                    if schance == 42:
+                        pkmg2 = pygame.image.load(os.path.join('assets','opp','shiny',oppath)).convert_alpha()
+                    else:
+                        pkmg2 = pygame.image.load(os.path.join('assets','opp','img_front',oppath)).convert_alpha()
+                        pkmg2 = pygame.transform.scale(pkmg2,(200,200))
+
+                        p_maxhealth = p_stats['HP']
+                        o_maxhealth = op_stats['HP']
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 if path == 'fight/fight'+typelist[r].name:
@@ -447,15 +516,7 @@ while (running):
                     video += 1
                     vol = 0.5
     
-    if p_stats['HP'] >= 0 and op_stats['HP']<=0: 
-        mainscreen = 'win'
-        audio = 'win'
-    elif p_stats['HP'] <= 0 and op_stats['HP']<=0:
-        mainscreen = 'tie'
-        audio = 'tie'
-    elif p_stats['HP'] <= 0 and op_stats['HP']>=0:
-        mainscreen = 'lose'
-        audio = 'lose'
+    
 
     #Battle Bg
     if mainscreen == 'bgimg':
