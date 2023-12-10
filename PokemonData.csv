@@ -120,7 +120,7 @@
 119,seaking,Water,65,90,120
 120,staryu,Water,80,85,95
 121,starmie,Water,105,130,120
-122,mr_mime,Psychic,250,5,5
+122,mr_mime,Psychic,250,11,5
 123,scyther,Bug,65,55,115
 124,jynx,Ice,105,95,80
 125,electabuzz,Electric,105,125,100
@@ -138,7 +138,7 @@
 137,porygon,Normal,65,125,100
 138,omanyte,Rock,65,155,120
 139,omastar,Rock,75,100,95
-140,kabuto,Rock,20,10,55
+140,kabuto,Rock,20,21,55
 141,kabutops,Rock,95,125,79
 142,aerodactyl,Rock,95,155,109
 143,snorlax,Normal,130,85,80

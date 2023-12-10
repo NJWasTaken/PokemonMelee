@@ -27,6 +27,8 @@ pk = df.Path[r]
 player_pk = df.Name[r]
 ptype = typelist[r]
 p_stats = pokedex.pokedata.iloc[r]
+if p_stats['HP']<=70:
+    p_stats['HP']+=30
 
 #Selecting a random Opponent Pokemon
 r2 = random.randint(1,151)
@@ -34,7 +36,8 @@ oppath=str(r2)+'.png'
 opponent_pk = df.Name[r2-1]
 optype = typelist[r2-1]
 op_stats = pokedex.pokedata.iloc[r2-1]
-
+if op_stats['HP']<=70:
+    op_stats['HP']+=30
 #Logic
 if ptype.name in optype.strength:
     op_stats['Attack']*=2
@@ -104,7 +107,7 @@ cimageY=220
 op = False
 pname = 'Red'
 opname = 'Blue'
-font = pygame.font.Font(os.path.join('assets','pokemon_fire_red.ttf'), 28)
+font = pygame.font.Font(os.path.join('assets','pokemon_fire_red.ttf'), 32)
 running = True
 hasatt=1
 hasstag=1
@@ -204,10 +207,10 @@ while (running):
     gui = pygame.transform.scale(gui,(1050, 187))
     speaker = pygame.image.load(os.path.join('assets','audio',sppath+'.png')).convert_alpha()
     speaker = pygame.transform.scale(speaker,(100,100))
-    p_health = font.render(str(int((p_stats['HP']/p_maxhealth)*100))+'%', True, (255,255,255))
-    op_health= font.render(str(int((op_stats['HP']/o_maxhealth)*100))+'%',True,(255,255,255))
     emoji = pygame.image.load(os.path.join('assets','art',r_emoji+'.png')).convert_alpha()
     emoji = pygame.transform.scale(emoji,(100,100))
+    player_pokemon_name = font.render(player_pk.capitalize(), True, (208,255,255))
+    opponent_pokemon_name = font.render(opponent_pk.capitalize(),True,(208,255,255))
     if p_stats['HP']>=1:
         p_hb = (p_stats['HP']/p_maxhealth)*180
     else:
@@ -265,7 +268,7 @@ while (running):
             vs_centre = False
     
     if mainscreen in ['win','lose','tie']:
-        screen.blit(exit_b,[400,600])
+        screen.blit(exit_b,[400,550])
 
     #Player attack event
     if pattack == True:
@@ -290,8 +293,8 @@ while (running):
         screen.blit(pkmg , [pimageX, pimageY])
         screen.blit(player_healthbar, [90,317])
         screen.blit(opponent_healthbar, [905,207])
-        screen.blit(p_health, [150,313])
-        screen.blit(op_health, [940,203])
+        screen.blit(player_pokemon_name,[45,284])
+        screen.blit(opponent_pokemon_name,[859,173])
     #User events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -299,7 +302,7 @@ while (running):
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
-            print('x:',x,',y:',y)
+            #print('x:',x,',y:',y)
             #Homepage
             if mainscreen == 'startup':
                 if x in range(405, 645) and y in range(610, 695):
@@ -343,12 +346,16 @@ while (running):
                     player_pk = df.Name[r]
                     ptype = typelist[r]
                     p_stats = pokedex.pokedata.iloc[r]
+                    if p_stats['HP']<=70:
+                        p_stats['HP']+=30
 
                     r2 = random.randint(1,151)
                     oppath=str(r2)+'.png'
                     opponent_pk = df.Name[r2-1]
                     optype = typelist[r2-1]
                     op_stats = pokedex.pokedata.iloc[r2-1]
+                    if op_stats['HP']<=70:
+                        op_stats['HP']+=30
 
                     if ptype.name in optype.strength:
                         op_stats['Attack']*=2
