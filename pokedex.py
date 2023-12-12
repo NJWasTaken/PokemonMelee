@@ -267,18 +267,3 @@ def typelist():
   return l
 
 df = pd.read_csv('PokemonData.csv')
-pokedata = pd.DataFrame(columns=['Name','Type','Attack','HP'])
-pokedata['Name']= df['Name']
-pokedata['Type']= typelist()
-pokedata['Attack']= list(map(lambda x: x//5,df['Attack']))
-pokedata['HP']= list(map(lambda x: x*2,df['HP']))
-
-def name():
-  return pokedata['Name']
-
-def attack():
-  return pokedata['Attack']
-
-def hp():
-  return pokedata['HP']
-
