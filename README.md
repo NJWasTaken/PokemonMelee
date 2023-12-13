@@ -2,11 +2,11 @@
 ### Mini-Project for Sem 1 at PESU
 Created by Noel Jose, Pranav Rajesh, Pranav Hemanth and Pragathi Panchangam
 
+[Demo video](https://drive.google.com/file/d/1iYvNo40w9AlxT6qL_pDkEM4LF-xWldfA/view?usp=sharing)
+
 ### Built With
 Python
 
-### Demo Video
-[Drive link](https://drive.google.com/file/d/1iYvNo40w9AlxT6qL_pDkEM4LF-xWldfA/view?usp=sharing)
 
 ### Installation
 1. Download all files including assets
