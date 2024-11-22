@@ -58,9 +58,9 @@ Guided by **Prof. Sowmya Shree P**, Dept. of CSE, PES University.
    ```
 3. Run the game:
 
-```bash
-python animation.py
-```
+   ```bash
+   python animation.py
+   ```
 
 Note: (Optional) Add the provided font in /assets/ to your system fonts for optimal presentation.
 
