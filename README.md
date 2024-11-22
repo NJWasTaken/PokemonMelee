@@ -59,7 +59,7 @@ Guided by **Prof. Sowmya Shree P**, Dept. of CSE, PES University.
 3. Run the game:
 
    ```bash
-   python animation.py
+   python game.py
    ```
 
 Note: (Optional) Add the provided font in /assets/ to your system fonts for optimal presentation.
@@ -68,7 +68,7 @@ Note: (Optional) Add the provided font in /assets/ to your system fonts for opti
 
 ## ⚙️ Project Structure
 
-- animation.py: Main game logic and GUI.
+- game.py: Main game logic and GUI.
 - pokedex.py: Custom module for Pokémon data.
 - Assets: Contains sprites, music, and font files.
 
@@ -86,13 +86,13 @@ Note: (Optional) Add the provided font in /assets/ to your system fonts for opti
 ### Battle Screen
 
 - **Fight**: Choose an attack and deal damage.
-- **Emote**: Show your feelings mid-battle.
+- **Emote**: Show your feelings mid-battle. (Totally didn't run out of ideas for alternative options)
 - **Scan**: Display player name, Pokémon stats (health, damage).
 - **Run**: Exit to the home screen.
 
 ### End Screen
 
-- Displays the winner and provides an option to replay or exit.
+- Displays the winner and provides an option to exit.
 
 ---
 
