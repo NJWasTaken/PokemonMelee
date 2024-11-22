@@ -6,10 +6,10 @@ Welcome to the **PokemonMelee** repository! This project is a strategic Pokémon
 
 ## 👥 Team Members
 
-- **Noel George Jose** - PES1UG23AM197 [GitHub](https://github.com/NJWasTaken)
-- **Pranav Hemanth** - PES1UG23CS433 [GitHub](https://github.com/Pranavh-2004/)
-- **Pranav Rajesh Narayan** - PES1UG23CS435 [GitHub](https://github.com/pranav-rn)
-- **Pragathi Panchangam** - PES1UG23CS424 [GitHub](https://github.com/pragathip005)
+- [**Noel George Jose**](https://github.com/NJWasTaken) - PES1UG23AM197 
+- [**Pranav Hemanth**](https://github.com/Pranavh-2004/) - PES1UG23CS433
+- [**Pranav Rajesh Narayan**](https://github.com/pranav-rn) - PES1UG23CS435
+- [**Pragathi Panchangam**](https://github.com/pragathip005) - PES1UG23CS424
 
 Guided by **Prof. Sowmya Shree P**, Dept. of CSE, PES University.
 
